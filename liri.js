@@ -8,10 +8,10 @@ var defaultScreenName = 'chinlong';
 var defaultSong = 'The Sign';
 var defaultMovie = 'Mr. Nobody';
 
-//myTweets();
+myTweets();
 //spotifyThisSong('dancing in the moonlight');
 //spotifyThisSong(defaultSong);
-movieThis(defaultMovie);
+//movieThis(defaultMovie);
 //movieThis('unforgiven');
 
 function myTweets() {
@@ -22,13 +22,18 @@ function myTweets() {
     		return console.error(error);
   		}
 
-  		tweets.forEach(function(tweet) {
-  			console.log(tweet.created_at + ':');
-  			console.log('  ' + tweet.text);
-  		});
+  		displayMyTweets(tweets);
 	});
 };
-
+function displayMyTweets(tweets) {
+	console.log('my-tweets');
+  	tweets.forEach(function(tweet) {
+  		console.log('----------------------------------');
+  		console.log(tweet.created_at + ':');
+  		console.log('  ' + tweet.text);
+  	});
+  	console.log('==================================');
+}
 function spotifyThisSong(song) {
 
 	debugger;
@@ -49,7 +54,6 @@ function spotifyThisSong(song) {
     			displayThisSong(songObj);
     		});
   			console.log('==================================');
-    		//console.log('length: ' + thisSong.length);
     	} else {
     		console.log('Invalid return data: No song found');
     	};
