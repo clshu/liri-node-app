@@ -81,13 +81,15 @@ function myTweets() {
 	});
 };
 function displayMyTweets(tweets) {
-	console.log('my-tweets');
+	var str = "";
+	str += 'my-tweets\n';
   	tweets.forEach(function(tweet) {
-  		console.log('----------------------------------');
-  		console.log(tweet.created_at + ':');
-  		console.log('  ' + tweet.text);
+  		str += '----------------------------------\n';
+  		str += tweet.created_at + ':\n';
+  		str += '  ' + tweet.text + '\n';
   	});
-  	console.log('==================================');
+  	str += '==================================\n';
+  	console.log(str);
 }
 function spotifyThisSong(song) {
 
@@ -113,25 +115,31 @@ function spotifyThisSong(song) {
 }
 
 function displayThisSongWrapper(song, thisSong) {
-    console.log('spotify-this-song,"' + song + '"');
+	var str = "";
+
+    str += 'spotify-this-song,"' + song + '"\n';
     thisSong.forEach(function(songObj) {
-    	displayThisSong(songObj);
+    	str += displayThisSong(songObj);
     });
-  	console.log('==================================');
+  	str += '==================================\n';
+  	console.log(str);
 }
 
 function displayThisSong(obj) {
+	var str = "";
 	// Extract artist's name(s)
 	// There could be more than one artist
 	var artists = obj.artists.map(function(artist) {
 		return artist.name;
 	});
 
-	console.log('----------------------------------');
-	console.log('Artist(s): ' + artists.join(', '));
-	console.log('Name: ' + obj.name);
-	console.log('Preview: ' + obj.preview_url);
-	console.log('Album: ' + obj.album.name);
+	str += '----------------------------------\n';
+	str += 'Artist(s): ' + artists.join(', ') + '\n';
+	str += 'Name: ' + obj.name + '\n';
+	str += 'Preview: ' + obj.preview_url + '\n';
+	str += 'Album: ' + obj.album.name + '\n';
+
+	return str;
 }
 
 function movieThis(movieName) {
@@ -154,18 +162,21 @@ function movieThis(movieName) {
 }
 
 function displayThisMovie(movieName, movieObj) {
-	console.log('movie-this,"' + movieName + '"');
-	console.log('----------------------------------');
-	console.log('Title: ' + movieObj.Title);
-	console.log('Year: ' + movieObj.Year);
-	console.log('IMDB Rating: ' + movieObj.imdbRating);
-	console.log('Country: ' + movieObj.Country);
-	console.log('Language: ' + movieObj.Language);
-	console.log('Plot: ' + movieObj.Plot);
-	console.log('Actors: ' + movieObj.Actors);
-	console.log('Rotten Tomatoes Rating: ' + movieObj.tomatoRating);
-	console.log('Rotten Tomatoes URL: ' + movieObj.tomatoURL);
-	console.log('==================================');
+	var str = "";
+	str += 'movie-this,"' + movieName + '"\n';
+	str += '----------------------------------\n';
+	str += 'Title: ' + movieObj.Title + '\n';
+	str += 'Year: ' + movieObj.Year + '\n';
+	str += 'IMDB Rating: ' + movieObj.imdbRating + '\n';
+	str += 'Country: ' + movieObj.Country + '\n';
+	str += 'Language: ' + movieObj.Language + '\n';
+	str += 'Plot: ' + movieObj.Plot + '\n';
+	str += 'Actors: ' + movieObj.Actors + '\n';
+	str += 'Rotten Tomatoes Rating: ' + movieObj.tomatoRating + '\n';
+	str += 'Rotten Tomatoes URL: ' + movieObj.tomatoURL + '\n';
+	str += '==================================\n';
+
+	console.log(str);
 }
 
 function doWhatItSays() {
