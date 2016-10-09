@@ -9,10 +9,13 @@ var defaultScreenName = 'chinlong';
 var defaultSong = 'The Sign';
 var defaultMovie = 'Mr. Nobody';
 var defaultInputFile = './random.txt'
+var defaultLogFile = './log.txt'
+
 
 var param1, param2;
 var params = [];
-
+var isLogging = process.env.LIRI_LOGGING;
+//console.log('LIRI_LOGGING: ' + isLogging);
 // Eexcution
 //
 // Handling prompts
@@ -63,10 +66,14 @@ function chooseAction(param1, param2) {
 function displayErr() {
 	console.log("Invalid Parameters.");
 	console.log("Usage:");
+	console.log("node liri.js [Commands] <option>")
+	console.log("e.x.:")
 	console.log("node liri.js my-tweets");
 	console.log("node liri.js spotify-this-song <song>");
 	console.log("node liri.js movie-this <movie>");
-	console.log("node liri.js do-what-it-says");
+	console.log("node liri.js do-what-it-says\n");
+	console.log("LIRI_LOGGING=true node liri.js [Commands] <option> will turn on logging to log.txt")
+	console.log("Default is false. i.e. No logging.")
 }
 
 function myTweets() {
@@ -77,12 +84,12 @@ function myTweets() {
     		return console.error(error);
   		}
 
-  		displayMyTweets(tweets);
+  		displayMyTweets(tweets, isLogging);
 	});
 };
-function displayMyTweets(tweets) {
+function displayMyTweets(tweets, logging) {
 	var str = "";
-	str += 'my-tweets\n';
+	str += 'Command: my-tweets\n';
   	tweets.forEach(function(tweet) {
   		str += '----------------------------------\n';
   		str += tweet.created_at + ':\n';
@@ -90,6 +97,9 @@ function displayMyTweets(tweets) {
   	});
   	str += '==================================\n';
   	console.log(str);
+  	if (logging) {
+  		loggingOutput(defaultLogFile, str);
+  	}
 }
 function spotifyThisSong(song) {
 
@@ -106,7 +116,7 @@ function spotifyThisSong(song) {
     	});
  
     	if (thisSong.length > 0) {
-    		displayThisSongWrapper(song, thisSong);
+    		displayThisSongWrapper(song, thisSong, isLogging);
     	} else {
     		console.log('Invalid return data: No song found');
     	};
@@ -114,15 +124,19 @@ function spotifyThisSong(song) {
 
 }
 
-function displayThisSongWrapper(song, thisSong) {
+function displayThisSongWrapper(song, thisSong, logging) {
 	var str = "";
 
-    str += 'spotify-this-song,"' + song + '"\n';
+    str += 'Command: spotify-this-song,"' + song + '"\n';
     thisSong.forEach(function(songObj) {
     	str += displayThisSong(songObj);
     });
   	str += '==================================\n';
   	console.log(str);
+
+  	if (logging) {
+  		loggingOutput(defaultLogFile, str);
+  	}
 }
 
 function displayThisSong(obj) {
@@ -152,7 +166,7 @@ function movieThis(movieName) {
 		}
 
 		if (response.statusCode == 200) {
-			displayThisMovie(movieName, JSON.parse(body));
+			displayThisMovie(movieName, JSON.parse(body), isLogging);
 		} else {
 			console.error("Response Error: " + response.statusCode);
 			console.error(response);
@@ -161,9 +175,9 @@ function movieThis(movieName) {
 
 }
 
-function displayThisMovie(movieName, movieObj) {
+function displayThisMovie(movieName, movieObj, logging) {
 	var str = "";
-	str += 'movie-this,"' + movieName + '"\n';
+	str += 'Command: movie-this,"' + movieName + '"\n';
 	str += '----------------------------------\n';
 	str += 'Title: ' + movieObj.Title + '\n';
 	str += 'Year: ' + movieObj.Year + '\n';
@@ -177,6 +191,10 @@ function displayThisMovie(movieName, movieObj) {
 	str += '==================================\n';
 
 	console.log(str);
+
+	if (logging) {
+		loggingOutput(defaultLogFile, str);
+	}
 }
 
 function doWhatItSays() {
@@ -198,12 +216,20 @@ function doWhatItSays() {
 				return;
 			}
 		} else {
-			return; // empty file
+			return; // bad formatted line
 		}
 		if (dataArr[1]) {
 			param2 = dataArr[1].slice(1, -1); // remove "" 
 		}
 
 		chooseAction(param1, param2);
+	});
+}
+
+function loggingOutput(fname, data) {
+	fs.appendFile(fname, data, function(err) {
+		if (err) {
+			return console.error(err);
+		}
 	});
 }
