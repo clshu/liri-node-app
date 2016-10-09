@@ -3,16 +3,18 @@ var twKeys = require('./keys');
 var Twitter = require('twitter');
 var spotify = require('spotify');
 var request = require('request');
+var fs = require('fs');
 
 var defaultScreenName = 'chinlong';
 var defaultSong = 'The Sign';
 var defaultMovie = 'Mr. Nobody';
 
-myTweets();
+//myTweets();
 //spotifyThisSong('dancing in the moonlight');
 //spotifyThisSong(defaultSong);
 //movieThis(defaultMovie);
 //movieThis('unforgiven');
+//doWhatItSays();
 
 function myTweets() {
 	var twClient = new Twitter(twKeys.twitterKeys);
@@ -49,16 +51,20 @@ function spotifyThisSong(song) {
     	});
  
     	if (thisSong.length > 0) {
-    		console.log('spotify-this-song,"' + song + '"');
-    		thisSong.forEach(function(songObj) {
-    			displayThisSong(songObj);
-    		});
-  			console.log('==================================');
+    		displayThisSongWrapper(song, thisSong);
     	} else {
     		console.log('Invalid return data: No song found');
     	};
 	});
 
+}
+
+function displayThisSongWrapper(song, thisSong) {
+    console.log('spotify-this-song,"' + song + '"');
+    thisSong.forEach(function(songObj) {
+    	displayThisSong(songObj);
+    });
+  	console.log('==================================');
 }
 
 function displayThisSong(obj) {
@@ -107,4 +113,8 @@ function displayThisMovie(movieName, movieObj) {
 	console.log('Rotten Tomatoes Rating: ' + movieObj.tomatoRating);
 	console.log('Rotten Tomatoes URL: ' + movieObj.tomatoURL);
 	console.log('==================================');
+}
+
+function doWhatItSays() {
+
 }
