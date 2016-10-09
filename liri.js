@@ -169,6 +169,7 @@ function displayThisMovie(movieName, movieObj) {
 }
 
 function doWhatItSays() {
+	var param1 = null;
 	var param2 = null;
 
 	fs.readFile(defaultInputFile, { encoding: 'utf8' }, function(error, data) {
@@ -177,10 +178,21 @@ function doWhatItSays() {
 		}
 	
 		var dataArr = data.split(',');
+
+		if (dataArr[0]) {
+			param1 = dataArr[0].toLowerCase();
+			if (param1 == 'do-what-it-says') {
+				// prevent recursive calls.
+				console.log("Can't use do-what-it-says in " + defaultInputFile);
+				return;
+			}
+		} else {
+			return; // empty file
+		}
 		if (dataArr[1]) {
 			param2 = dataArr[1].slice(1, -1); // remove "" 
 		}
 
-		chooseAction(dataArr[0], param2);
+		chooseAction(param1, param2);
 	});
 }
