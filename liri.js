@@ -8,13 +8,66 @@ var fs = require('fs');
 var defaultScreenName = 'chinlong';
 var defaultSong = 'The Sign';
 var defaultMovie = 'Mr. Nobody';
+var defaultInputFile = './random.txt'
 
-//myTweets();
-//spotifyThisSong('dancing in the moonlight');
-//spotifyThisSong(defaultSong);
-//movieThis(defaultMovie);
-//movieThis('unforgiven');
-//doWhatItSays();
+var param1, param2;
+var params = [];
+
+// Eexcution
+//
+// Handling prompts
+if (process.argv[2]) {
+	param1 = process.argv[2].toLowerCase();
+} else {
+	displayErr();
+	return;
+}
+
+if (process.argv[3]) {
+	for (var i = 3; i < process.argv.length; i++) {
+		params.push(process.argv[i]);
+	}
+	param2 = params.join(' ');
+} else {
+	param2 = null;
+}
+
+chooseAction(param1, param2);
+
+return;
+
+// Functions
+
+function chooseAction(param1, param2) {
+	switch(param1) {
+		case 'my-tweets':
+			myTweets();
+			return;
+		case 'spotify-this-song':
+			var song = param2 || defaultSong;
+			spotifyThisSong(song);
+			return;
+		case 'movie-this':
+			var movie = param2 || defaultMovie;
+			movieThis(movie);
+			return;
+		case 'do-what-it-says':
+			doWhatItSays();
+			return;
+		default:
+			displayErr();
+			return;
+	}
+}
+
+function displayErr() {
+	console.log("Invalid Parameters.");
+	console.log("Usage:");
+	console.log("node liri.js my-tweets");
+	console.log("node liri.js spotify-this-song <song>");
+	console.log("node liri.js movie-this <movie>");
+	console.log("node liri.js do-what-it-says");
+}
 
 function myTweets() {
 	var twClient = new Twitter(twKeys.twitterKeys);
@@ -116,5 +169,18 @@ function displayThisMovie(movieName, movieObj) {
 }
 
 function doWhatItSays() {
+	var param2 = null;
 
+	fs.readFile(defaultInputFile, { encoding: 'utf8' }, function(error, data) {
+		if (error) {
+			return console.error(error);
+		}
+	
+		var dataArr = data.split(',');
+		if (dataArr[1]) {
+			param2 = dataArr[1].slice(1, -1); // remove "" 
+		}
+
+		chooseAction(dataArr[0], param2);
+	});
 }
