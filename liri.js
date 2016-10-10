@@ -111,7 +111,7 @@ function spotifyThisSong(song) {
     	}
     	// There could be more than one track found
     	// Extract the ones with the same name
-    	thisSong = data.tracks.items.filter(function(item) {
+    	var thisSong = data.tracks.items.filter(function(item) {
     		return item.name.toLowerCase() === song.toLowerCase();
     	});
  
